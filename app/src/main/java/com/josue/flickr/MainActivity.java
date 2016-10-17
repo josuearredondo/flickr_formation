@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     boolean bound = false;
     ListView listView;
     Button bntChange;
+    Context context;
 
     AdapterFlickr adapter;
     List<String> list1;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, FlickrService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        context = this;
     }
     @Override
     protected void onStop() {
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             FlickrService.ServiceBinder binder = (FlickrService.ServiceBinder) service;
             boundService = binder.getService();
+            boundService.setContext(context);
             bound = true;
         }
 
@@ -73,14 +76,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 if (bound) {
-                    boundService.getToastText();
+                    boundService.getRetrofitFlickr();
                 }
                 /*list2 = new ArrayList<>();
                 list2.add("Nono");
                 list2.add("Nini");
                 list2.add("Nana");
                 adapter.setListText(list2);*/
-
 
             }
         });
