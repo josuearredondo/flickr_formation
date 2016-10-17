@@ -42,6 +42,8 @@ public class AdapterFlickr extends BaseAdapter {
         }
         TextView textView = (TextView) convertView.findViewById(R.id.textRow);
         textView.setText(listFlickr.get(position));
+        ImageView image = (ImageView) convertView.findViewById(R.id.imageRow);
+        image.setImageResource(R.drawable.flickr);
         return convertView;
     }
 
