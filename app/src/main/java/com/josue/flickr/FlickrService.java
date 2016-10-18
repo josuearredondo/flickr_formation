@@ -53,7 +53,7 @@ public class FlickrService extends Service {
     }
 
     public void getRetrofitFlickr() {
-        Call<FlickrPhotosResponse> flickrPhotoResponse = service.getPhotos("dogwolf");
+        Call<FlickrPhotosResponse> flickrPhotoResponse = service.getPhotos("dogwolf",getString(R.string.api_flickr));
 
         flickrPhotoResponse.enqueue(new Callback<FlickrPhotosResponse>() {
             @Override
