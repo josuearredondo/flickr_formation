@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +24,12 @@ public class FlickrService extends Service {
     private String str = new String("Hola");
     private Context context;
     FlickrServiceHTTP service;
+
+    public void setFlickrServiceListener(FlickrServiceListener flickrServiceListener) {
+        this.flickrServiceListener = flickrServiceListener;
+    }
+
+    FlickrServiceListener flickrServiceListener;
 
     public void setContext(Context context) {
         this.context = context;
@@ -48,8 +58,13 @@ public class FlickrService extends Service {
         flickrPhotoResponse.enqueue(new Callback<FlickrPhotosResponse>() {
             @Override
             public void onResponse(Call<FlickrPhotosResponse> call, Response<FlickrPhotosResponse> response) {
-                String rep = call.request().toString();
-                Toast.makeText(context,rep, Toast.LENGTH_SHORT).show();
+
+                if (call.isExecuted()) {
+                    FlickrPhotosResponse flickrPhotosResponse = response.body();
+                    flickrServiceListener.onResponseListener(converterPhotoResponse(flickrPhotosResponse));
+                    Toast.makeText(context,"onResponse Executed", Toast.LENGTH_SHORT).show();
+                }
+
             }
             @Override
             public void onFailure(Call<FlickrPhotosResponse> call, Throwable t) {
@@ -58,4 +73,17 @@ public class FlickrService extends Service {
             }
         });
     }
+
+    public List<FlickrObjet> converterPhotoResponse(FlickrPhotosResponse flickrPhotosResponse) {
+        List<Photo> photoList = flickrPhotosResponse.getPhotos().getPhoto();
+        List<FlickrObjet> flickrObjets = new ArrayList<>();
+        for (Photo photo : photoList){
+            String url = "https://farm"+photo.getFarm()+".static.flickr.com/"+photo.getServer()+"/"+photo.getId()+"_"+photo.getSecret()+"_s.jpg";
+            String title = photo.getTitle();
+            FlickrObjet flickrObjet = new FlickrObjet(title, url);
+            flickrObjets.add(flickrObjet);
+        }
+       return flickrObjets;
+    }
+
 }

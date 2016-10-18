@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,7 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FlickrServiceListener {
     private FlickrService boundService;
     boolean bound = false;
     ListView listView;
@@ -22,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Context context;
 
     AdapterFlickr adapter;
-    List<String> list1;
-    List<String> list2;
+    List<FlickrObjet> listFlickr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,8 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         bntChange = (Button) findViewById(R.id.buttonChange);
 
-        list1 = new ArrayList<>();
-        list1.add("Toto");
-        list1.add("Titi");
-        list1.add("Tata");
         adapter = new AdapterFlickr (this);
         listView.setAdapter(adapter);
-        adapter.setListText(list1);
         addListenerOnButton();
     }
 
@@ -62,13 +57,14 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             FlickrService.ServiceBinder binder = (FlickrService.ServiceBinder) service;
             boundService = binder.getService();
+            boundService.setFlickrServiceListener(MainActivity.this);
             boundService.setContext(context);
             bound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            bound = false;
         }
     };
     public void addListenerOnButton() {
@@ -78,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
                 if (bound) {
                     boundService.getRetrofitFlickr();
                 }
-                /*list2 = new ArrayList<>();
-                list2.add("Nono");
-                list2.add("Nini");
-                list2.add("Nana");
-                adapter.setListText(list2);*/
-
             }
         });
+    }
+
+    @Override
+    public void onResponseListener(List<FlickrObjet> flickrObjetList) {
+        Log.e("response", String.valueOf(flickrObjetList.size()));
+        adapter.setListImages(flickrObjetList);
     }
 }
