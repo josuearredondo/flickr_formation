@@ -7,9 +7,13 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.List;
@@ -18,7 +22,8 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     private FlickrService boundService;
     boolean bound = false;
     ListView listView;
-    Button bntChange;
+    Button searchButton;
+    EditText editText;
     Context context;
 
     AdapterFlickr adapter;
@@ -29,11 +34,28 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
-        bntChange = (Button) findViewById(R.id.buttonChange);
-
+        searchButton = (Button) findViewById(R.id.buttonChange);
+        editText = (EditText) findViewById(R.id.input_edit_text);
         adapter = new AdapterFlickr (this);
         listView.setAdapter(adapter);
         addListenerOnButton();
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (bound && !editText.getText().toString().equals("")) {
+                    boundService.getRetrofitFlickr(editText.getText().toString());
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -66,20 +88,39 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
             bound = false;
         }
     };
+
     public void addListenerOnButton() {
-        bntChange.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 if (bound) {
-                    boundService.getRetrofitFlickr();
+                    boundService.getRetrofitFlickr(editText.getText().toString());
                 }
+                try  {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+
+                }
+
             }
         });
     }
 
+    /*public void addListenerOnRow() {
+        linearLayoutRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                /*if (bound) {
+                    boundService.getRetrofitFlickr(editText.getText().toString());
+                }
+            }
+        });SSS
+    }*/
+
     @Override
     public void onResponseListener(List<FlickrObjet> flickrObjetList) {
-        Log.e("response", String.valueOf(flickrObjetList.size()));
+        //Log.e("response", String.valueOf(flickrObjetList.size()));
         adapter.setListImages(flickrObjetList);
     }
 }

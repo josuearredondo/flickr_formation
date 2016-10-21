@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,8 +51,8 @@ public class FlickrService extends Service {
         Toast.makeText(this,str, Toast.LENGTH_SHORT).show();
     }
 
-    public void getRetrofitFlickr() {
-        Call<FlickrPhotosResponse> flickrPhotoResponse = service.getPhotos("dogwolf",getString(R.string.api_flickr));
+    public void getRetrofitFlickr(String search) {
+        Call<FlickrPhotosResponse> flickrPhotoResponse = service.getPhotos(search,getString(R.string.api_flickr));
 
         flickrPhotoResponse.enqueue(new Callback<FlickrPhotosResponse>() {
             @Override
@@ -64,7 +63,6 @@ public class FlickrService extends Service {
                     flickrServiceListener.onResponseListener(converterPhotoResponse(flickrPhotosResponse));
                     Toast.makeText(context,"onResponse Executed", Toast.LENGTH_SHORT).show();
                 }
-
             }
             @Override
             public void onFailure(Call<FlickrPhotosResponse> call, Throwable t) {
@@ -78,7 +76,7 @@ public class FlickrService extends Service {
         List<Photo> photoList = flickrPhotosResponse.getPhotos().getPhoto();
         List<FlickrObjet> flickrObjets = new ArrayList<>();
         for (Photo photo : photoList){
-            String url = "https://farm"+photo.getFarm()+".static.flickr.com/"+photo.getServer()+"/"+photo.getId()+"_"+photo.getSecret()+"_s.jpg";
+            String url = "https://farm"+photo.getFarm()+".static.flickr.com/"+photo.getServer()+"/"+photo.getId()+"_"+photo.getSecret()+".jpg";
             String title = photo.getTitle();
             FlickrObjet flickrObjet = new FlickrObjet(title, url);
             flickrObjets.add(flickrObjet);

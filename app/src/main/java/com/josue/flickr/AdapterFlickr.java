@@ -2,12 +2,13 @@ package com.josue.flickr;
 
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -17,7 +18,9 @@ import java.util.List;
 
 public class AdapterFlickr extends BaseAdapter {
     private List<FlickrObjet> listFlickr;
+    private LinearLayout linearLayoutRow;
     private Context context;
+    private int position;
 
     public AdapterFlickr(Context context) {
         listFlickr = new ArrayList<FlickrObjet>();
@@ -36,27 +39,31 @@ public class AdapterFlickr extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         // TODO Auto-generated method stub
+        this.position = position;
         return position;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.raw_layout, parent, false);
         }
-        Log.e("getView", String.valueOf(listFlickr.get(position).getTitle()));
-        Log.e("getView", String.valueOf(listFlickr.get(position).getUrl()));
         TextView textView = (TextView) convertView.findViewById(R.id.textRow);
         textView.setText(listFlickr.get(position).getTitle());
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageRow);
         Picasso.with(context).load(listFlickr.get(position).getUrl()).resize(100, 100).placeholder(R.drawable.flickr).centerCrop().into(imageView);
-
+        linearLayoutRow = (LinearLayout) convertView.findViewById(R.id.linearRow);
+        linearLayoutRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("EXTRA_TITLE",listFlickr.get(position).getTitle());
+                intent.putExtra("EXTRA_URL_IMAGE",listFlickr.get(position).getUrl());
+                context.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
-    public void setListText(List listText) {
-        this.listFlickr = listText;
-        notifyDataSetChanged();
-    }
     public void setListImages(List<FlickrObjet> flickrList) {
         this.listFlickr = flickrList;
         notifyDataSetChanged();
