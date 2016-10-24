@@ -6,16 +6,21 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -24,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     boolean bound = false;
     ListView listView;
     FloatingActionButton fab;
+    Toolbar mToolbar;
+    private MenuItem mSearchAction;
+    private boolean isSearchOpened = false;
+    private EditText editSearch;
     EditText editText;
     Context context;
 
@@ -36,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(mToolbar);
         editText = (EditText) findViewById(R.id.input_edit_text);
         adapter = new AdapterFlickr (this);
         listView.setAdapter(adapter);
@@ -57,6 +69,31 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
 
             }
         });
+    }
+    private void doSearch() {
+        if (bound && !editSearch.getText().toString().equals("")) {
+            boundService.getRetrofitFlickr(editSearch.getText().toString());
+        }
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_search:
+                handleMenuSearch();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -120,4 +157,66 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     public void onResponseListener(List<FlickrObjet> flickrObjetList) {
         adapter.setListImages(flickrObjetList);
     }
+
+    protected void handleMenuSearch(){
+        ActionBar action = getSupportActionBar(); //get the actionbar
+
+        if(isSearchOpened){ //test if the search is open
+
+            action.setDisplayShowCustomEnabled(false); //disable a custom view inside the actionbar
+            action.setDisplayShowTitleEnabled(true); //show the title in the action bar
+
+            //hides the keyboard
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(editSearch.getWindowToken(), 0);
+
+            //add the search icon in the action bar
+            mSearchAction.setIcon(android.R.drawable.ic_menu_search);
+
+            isSearchOpened = false;
+        } else { //open the search entry
+
+            action.setDisplayShowCustomEnabled(true); //enable it to display a
+            // custom view in the action bar.
+            action.setCustomView(R.layout.search_bar);//add the custom view
+            action.setDisplayShowTitleEnabled(false); //hide the title
+
+            editSearch = (EditText)action.getCustomView().findViewById(R.id.editSearch); //the text editor
+
+            //this is a listener to do a search when the user clicks on search button
+            editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        doSearch();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+
+            editSearch.requestFocus();
+
+            //open the keyboard focused in the edtSearch
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editSearch, InputMethodManager.SHOW_IMPLICIT);
+
+
+            //add the close icon
+            mSearchAction.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+
+            isSearchOpened = true;
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if(isSearchOpened) {
+            handleMenuSearch();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+
 }
