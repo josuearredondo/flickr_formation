@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     private FlickrService boundService;
     boolean bound = false;
     ListView listView;
-    Button searchButton;
+    FloatingActionButton fab;
     EditText editText;
     Context context;
 
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
-        searchButton = (Button) findViewById(R.id.buttonChange);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         editText = (EditText) findViewById(R.id.input_edit_text);
         adapter = new AdapterFlickr (this);
         listView.setAdapter(adapter);
@@ -90,37 +91,33 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     };
 
     public void addListenerOnButton() {
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (bound) {
-                    boundService.getRetrofitFlickr(editText.getText().toString());
-                }
-                try  {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                } catch (Exception e) {
+                if (!editText.getText().toString().equals("")) {
+                    if (bound) {
+                        boundService.getRetrofitFlickr(editText.getText().toString());
+                    }
+                    try  {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    } catch (Exception e) {
 
-                }
+                    }
+                } else {
+                    try  {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    } catch (Exception e) {
 
+                    }
+                }
             }
         });
     }
 
-    /*public void addListenerOnRow() {
-        linearLayoutRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                /*if (bound) {
-                    boundService.getRetrofitFlickr(editText.getText().toString());
-                }
-            }
-        });SSS
-    }*/
-
     @Override
     public void onResponseListener(List<FlickrObjet> flickrObjetList) {
-        //Log.e("response", String.valueOf(flickrObjetList.size()));
         adapter.setListImages(flickrObjetList);
     }
 }
