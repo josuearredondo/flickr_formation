@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterFlickr extends BaseAdapter {
+public class AdapterFlickr extends BaseAdapter implements FragmentDetailCommunicator {
     private List<FlickrObjet> listFlickr;
     private LinearLayout linearLayoutRow;
     private Context context;
@@ -67,6 +67,11 @@ public class AdapterFlickr extends BaseAdapter {
     public void setListImages(List<FlickrObjet> flickrList) {
         this.listFlickr = flickrList;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void passDataToDetailFragment(String title, String url) {
+
     }
 }
 

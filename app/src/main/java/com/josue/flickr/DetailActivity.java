@@ -13,7 +13,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.fragment_detail);
         String title = getIntent().getExtras().getString("EXTRA_TITLE");
         String url = getIntent().getExtras().getString("EXTRA_URL_IMAGE");
 
