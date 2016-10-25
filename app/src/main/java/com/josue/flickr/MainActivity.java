@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab = (FloatingActionButton) findViewById(R.id.fab);
         editText = (EditText) findViewById(R.id.input_edit_text);
         adapter = new AdapterFlickr (this);
         listView.setAdapter(adapter);
