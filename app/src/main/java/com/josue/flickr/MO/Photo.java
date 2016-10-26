@@ -1,4 +1,4 @@
-package com.josue.flickr;
+package com.josue.flickr.MO;
 
 public class Photo {
     private String owner;

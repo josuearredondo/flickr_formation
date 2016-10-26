@@ -1,5 +1,7 @@
-package com.josue.flickr;
+package com.josue.flickr.BU;
 
+
+import com.josue.flickr.MO.FlickrPhotosResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

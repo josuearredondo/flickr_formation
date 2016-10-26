@@ -1,9 +1,12 @@
-package com.josue.flickr;
+package com.josue.flickr.MO;
 
 
-public class FlickrObjet {
+import java.io.Serializable;
+
+public class FlickrObjet implements Serializable{
     private String title;
     private String url;
+
 
     public FlickrObjet(String title, String url) {
         this.title = title;

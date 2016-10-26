@@ -1,4 +1,4 @@
-package com.josue.flickr;
+package com.josue.flickr.BU;
 
 
 import android.app.Service;
@@ -8,6 +8,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
+
+import com.josue.flickr.MO.FlickrObjet;
+import com.josue.flickr.MO.FlickrPhotosResponse;
+import com.josue.flickr.MO.Photo;
+import com.josue.flickr.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +47,7 @@ public class FlickrService extends Service {
         return binder;
     }
     public class ServiceBinder extends Binder {
-        FlickrService getService() {
+        public FlickrService getService() {
             return FlickrService.this;
         }
     }

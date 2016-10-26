@@ -1,4 +1,6 @@
-package com.josue.flickr;
+package com.josue.flickr.MO;
+
+import com.josue.flickr.MO.Photo;
 
 import java.util.List;
 

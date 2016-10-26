@@ -1,10 +1,9 @@
-package com.josue.flickr;
+package com.josue.flickr.UI;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.josue.flickr.MO.FlickrObjet;
+import com.josue.flickr.BU.FlickrService;
+import com.josue.flickr.BU.FlickrServiceListener;
+import com.josue.flickr.R;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -27,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     private FlickrService boundService;
     boolean bound = false;
     ListView listView;
-    FloatingActionButton fab;
     EditText editText;
     Context context;
     Button searchButton;
@@ -41,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listView);
-        //fab = (FloatingActionButton) findViewById(R.id.fab);
         searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setBackgroundResource(android.R.drawable.ic_search_category_default);
         editText = (EditText) findViewById(R.id.input_edit_text);
