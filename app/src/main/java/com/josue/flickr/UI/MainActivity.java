@@ -75,22 +75,36 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.mipmap.ic_launcher);
 
-        ImageView itemIcon4 = new ImageView(this);
-        itemIcon4.setImageResource(R.mipmap.ic_launcher);
-
         SubActionButton button1 = itemBuilder.setContentView(itemIcon1).build();
         SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
         SubActionButton button3 = itemBuilder.setContentView(itemIcon3).build();
-        SubActionButton button4 = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(button1)
                 .addSubActionView(button2)
                 .addSubActionView(button3)
-                .addSubActionView(button4)
                 .attachTo(actionButton)
                 .build();
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override

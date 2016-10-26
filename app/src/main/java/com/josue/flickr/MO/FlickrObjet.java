@@ -6,6 +6,16 @@ import java.io.Serializable;
 public class FlickrObjet implements Serializable{
     private String title;
     private String url;
+    private String id;
+    private String type;
+    private String lat;
+    private String lng;
+    private int count;
+    private String search;
+
+    enum Type {
+        historic, favorite
+    }
 
 
     public FlickrObjet(String title, String url) {
