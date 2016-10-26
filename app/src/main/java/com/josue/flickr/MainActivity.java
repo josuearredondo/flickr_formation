@@ -4,13 +4,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     FloatingActionButton fab;
     EditText editText;
     Context context;
-
+    Button searchButton;
+    Toolbar mActionBarToolbar;
     AdapterFlickr adapter;
     List<FlickrObjet> listFlickr;
 
@@ -35,12 +39,22 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         listView = (ListView) findViewById(R.id.listView);
         //fab = (FloatingActionButton) findViewById(R.id.fab);
+        searchButton = (Button) findViewById(R.id.search_button);
+        searchButton.setBackgroundResource(android.R.drawable.ic_search_category_default);
         editText = (EditText) findViewById(R.id.input_edit_text);
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Search");
+
         adapter = new AdapterFlickr (this);
+
         listView.setAdapter(adapter);
+
         addListenerOnButton();
+
         // Create an icon to the FAB menu
         ImageView icon = new ImageView(this);
         icon.setImageResource(R.mipmap.ic_launcher);
@@ -126,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
     };
 
     public void addListenerOnButton() {
-        /*fab.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 if (!editText.getText().toString().equals("")) {
@@ -148,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
                     }
                 }
             }
-        });*/
+        });
     }
 
     @Override
