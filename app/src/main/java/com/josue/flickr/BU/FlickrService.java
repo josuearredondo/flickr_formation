@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.josue.flickr.MO.FlickrObjet;
+import com.josue.flickr.DB.FlickrObjet;
 import com.josue.flickr.MO.FlickrPhotosResponse;
 import com.josue.flickr.MO.Photo;
 import com.josue.flickr.R;
@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FlickrService extends Service {
     private IBinder binder = new ServiceBinder();
-    private String str = new String("Hola");
+    public String strSearch;
     private Context context;
     FlickrServiceHTTP service;
 
@@ -51,12 +51,14 @@ public class FlickrService extends Service {
             return FlickrService.this;
         }
     }
+
     /** method for clients */
     public void getToastText() {
-        Toast.makeText(this,str, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,strSearch, Toast.LENGTH_SHORT).show();
     }
 
     public void getRetrofitFlickr(String search) {
+        strSearch = search;
         Call<FlickrPhotosResponse> flickrPhotoResponse = service.getPhotos(search,getString(R.string.api_flickr));
 
         flickrPhotoResponse.enqueue(new Callback<FlickrPhotosResponse>() {
@@ -83,7 +85,8 @@ public class FlickrService extends Service {
         for (Photo photo : photoList){
             String url = "https://farm"+photo.getFarm()+".static.flickr.com/"+photo.getServer()+"/"+photo.getId()+"_"+photo.getSecret()+".jpg";
             String title = photo.getTitle();
-            FlickrObjet flickrObjet = new FlickrObjet(title, url);
+            //String id = photo.getId();
+            FlickrObjet flickrObjet = new FlickrObjet(title, url, strSearch);
             flickrObjets.add(flickrObjet);
         }
        return flickrObjets;

@@ -3,8 +3,6 @@ package com.josue.flickr.UI;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.josue.flickr.MO.FlickrObjet;
+import com.josue.flickr.DB.FlickrObjet;
 import com.josue.flickr.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

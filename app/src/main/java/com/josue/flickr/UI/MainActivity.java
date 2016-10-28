@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.josue.flickr.MO.FlickrObjet;
+import com.josue.flickr.DB.FlickrObjet;
 import com.josue.flickr.BU.FlickrService;
 import com.josue.flickr.BU.FlickrServiceListener;
 import com.josue.flickr.R;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
 
         // Create an icon to the FAB menu
         ImageView icon = new ImageView(this);
-        icon.setImageResource(R.mipmap.ic_launcher);
+        icon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_add));
 
         FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(icon)
@@ -67,13 +67,14 @@ public class MainActivity extends AppCompatActivity implements FlickrServiceList
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         // repeat many times:
         ImageView itemIcon1 = new ImageView(this);
-        itemIcon1.setImageResource(R.mipmap.ic_launcher);
+        itemIcon1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_mylocation));
+        //itemIcon1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         ImageView itemIcon2 = new ImageView(this);
-        itemIcon2.setImageResource(R.mipmap.ic_launcher);
+        itemIcon2.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_recent_history));
 
         ImageView itemIcon3 = new ImageView(this);
-        itemIcon3.setImageResource(R.mipmap.ic_launcher);
+        itemIcon3.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star));
 
         SubActionButton button1 = itemBuilder.setContentView(itemIcon1).build();
         SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
